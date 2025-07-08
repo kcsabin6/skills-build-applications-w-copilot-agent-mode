@@ -11,14 +11,18 @@ class Command(BaseCommand):
 
         try:
             # Create users
-            users = [
-                User(_id=ObjectId(), username='thundergod', email='thundergod@mhigh.edu', password='thundergodpassword'),
-                User(_id=ObjectId(), username='metalgeek', email='metalgeek@mhigh.edu', password='metalgeekpassword'),
-                User(_id=ObjectId(), username='zerocool', email='zerocool@mhigh.edu', password='zerocoolpassword'),
-                User(_id=ObjectId(), username='crashoverride', email='crashoverride@mhigh.edu', password='crashoverridepassword'),
-                User(_id=ObjectId(), username='sleeptoken', email='sleeptoken@mhigh.edu', password='sleeptokenpassword'),
+            users = []
+            user_data = [
+                {'username': 'thundergod', 'email': 'thundergod@mhigh.edu', 'password': 'thundergodpassword'},
+                {'username': 'metalgeek', 'email': 'metalgeek@mhigh.edu', 'password': 'metalgeekpassword'},
+                {'username': 'zerocool', 'email': 'zerocool@mhigh.edu', 'password': 'zerocoolpassword'},
+                {'username': 'crashoverride', 'email': 'crashoverride@mhigh.edu', 'password': 'crashoverridepassword'},
+                {'username': 'sleeptoken', 'email': 'sleeptoken@mhigh.edu', 'password': 'sleeptokenpassword'},
             ]
-            User.objects.bulk_create(users)
+            for data in user_data:
+                user = User(_id=ObjectId(), **data)
+                user.save()
+                users.append(user)
             self.stdout.write('Users created successfully.')
 
             # Create teams
@@ -31,36 +35,42 @@ class Command(BaseCommand):
             self.stdout.write('Teams created successfully.')
 
             # Create activities
-            activities = [
-                Activity(_id=ObjectId(), user=users[0], activity_type='Cycling', duration=timedelta(hours=1)),
-                Activity(_id=ObjectId(), user=users[1], activity_type='Crossfit', duration=timedelta(hours=2)),
-                Activity(_id=ObjectId(), user=users[2], activity_type='Running', duration=timedelta(hours=1, minutes=30)),
-                Activity(_id=ObjectId(), user=users[3], activity_type='Strength', duration=timedelta(minutes=30)),
-                Activity(_id=ObjectId(), user=users[4], activity_type='Swimming', duration=timedelta(hours=1, minutes=15)),
+            activity_data = [
+                {'user': users[0], 'activity_type': 'Cycling', 'duration': timedelta(hours=1)},
+                {'user': users[1], 'activity_type': 'Crossfit', 'duration': timedelta(hours=2)},
+                {'user': users[2], 'activity_type': 'Running', 'duration': timedelta(hours=1, minutes=30)},
+                {'user': users[3], 'activity_type': 'Strength', 'duration': timedelta(minutes=30)},
+                {'user': users[4], 'activity_type': 'Swimming', 'duration': timedelta(hours=1, minutes=15)},
             ]
-            Activity.objects.bulk_create(activities)
+            for data in activity_data:
+                activity = Activity(_id=ObjectId(), **data)
+                activity.save()
             self.stdout.write('Activities created successfully.')
 
             # Create leaderboard entries
-            leaderboard_entries = [
-                Leaderboard(_id=ObjectId(), user=users[0], score=100),
-                Leaderboard(_id=ObjectId(), user=users[1], score=90),
-                Leaderboard(_id=ObjectId(), user=users[2], score=95),
-                Leaderboard(_id=ObjectId(), user=users[3], score=85),
-                Leaderboard(_id=ObjectId(), user=users[4], score=80),
+            leaderboard_data = [
+                {'user': users[0], 'score': 100},
+                {'user': users[1], 'score': 90},
+                {'user': users[2], 'score': 95},
+                {'user': users[3], 'score': 85},
+                {'user': users[4], 'score': 80},
             ]
-            Leaderboard.objects.bulk_create(leaderboard_entries)
+            for data in leaderboard_data:
+                leaderboard = Leaderboard(_id=ObjectId(), **data)
+                leaderboard.save()
             self.stdout.write('Leaderboard entries created successfully.')
 
             # Create workouts
-            workouts = [
-                Workout(_id=ObjectId(), name='Cycling Training', description='Training for a road cycling event'),
-                Workout(_id=ObjectId(), name='Crossfit', description='Training for a crossfit competition'),
-                Workout(_id=ObjectId(), name='Running Training', description='Training for a marathon'),
-                Workout(_id=ObjectId(), name='Strength Training', description='Training for strength'),
-                Workout(_id=ObjectId(), name='Swimming Training', description='Training for a swimming competition'),
+            workout_data = [
+                {'name': 'Cycling Training', 'description': 'Training for a road cycling event'},
+                {'name': 'Crossfit', 'description': 'Training for a crossfit competition'},
+                {'name': 'Running Training', 'description': 'Training for a marathon'},
+                {'name': 'Strength Training', 'description': 'Training for strength'},
+                {'name': 'Swimming Training', 'description': 'Training for a swimming competition'},
             ]
-            Workout.objects.bulk_create(workouts)
+            for data in workout_data:
+                workout = Workout(_id=ObjectId(), **data)
+                workout.save()
             self.stdout.write('Workouts created successfully.')
 
             self.stdout.write(self.style.SUCCESS('Database population completed.'))
